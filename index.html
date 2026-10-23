@@ -294,6 +294,23 @@ html.rv-on .rv.in{opacity:1;transform:none}
 .keypad button{font:inherit;font-size:22px;line-height:1;height:52px;border-radius:980px;border:0;background:var(--g);color:var(--fg);cursor:pointer;transition:background var(--t-s) var(--e),color var(--t-s) var(--e)}
 .keypad button:active{background:var(--b);color:var(--w)}
 
+/* lesson view: one lesson at a time, tighter rhythm */
+.mod.s{padding-block:36px 80px}
+.mod h2{font-size:clamp(34px,4.6vw,46px);line-height:1.08}
+.mod .why{font-size:19px;line-height:28px;margin-top:14px}
+.mod h3{margin:40px 0 12px}
+.mod .terms,.mod .layers,.mod .trouble,.mod .quiz{margin-top:32px}
+.lbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px;font-size:15px;line-height:21px}
+.lbar .back{font-weight:600}
+.lpos{color:var(--mut);font-variant-numeric:tabular-nums}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px;max-width:none}
+.pg{display:flex;flex-direction:column;gap:4px;background:var(--card);border-radius:28px;padding:24px 28px;color:var(--fg);text-decoration:none!important;
+  transition:box-shadow var(--t-s) var(--e),transform var(--t-s) var(--e)}
+.pg:hover{box-shadow:var(--sh);transform:translateY(-2px)}
+.pg.next{text-align:right;background:var(--b);color:var(--w)}
+.pg .d{font-size:14px;line-height:20px;color:var(--mut)}
+.pg.next .d{color:var(--w);opacity:.85}
+.pg .t{font-size:19px;line-height:25px;font-weight:600}
 @media (max-width:820px){
   .top nav a{display:none}
   .layers,.builder{grid-template-columns:1fr}
@@ -302,6 +319,8 @@ html.rv-on .rv.in{opacity:1;transform:none}
   footer ul{columns:1}
 }
 @media (max-width:560px){
+  .pager{grid-template-columns:1fr}
+  .mod.s{padding-block:24px 64px}
   .term,.q,.form,.layer-detail{padding:28px}
   ol.steps>li{padding:20px 22px;gap:14px}
   .note,.warn,.tabs,details{padding:24px}
@@ -433,7 +452,7 @@ html.rv-on .rv.in{opacity:1;transform:none}
   <div class="inner">
     <span class="eyebrow">Course map</span>
     <h2>Your progress</h2>
-    <p class="why">Twelve lessons, one long page. Jump to any lesson below; the counters update as you tick steps.</p>
+    <p class="why">Twelve short lessons. Open one below and use Next to move on; the counters update as you tick steps.</p>
     <div class="prog">
       <div class="meter" aria-hidden="true"><i id="meterBar"></i></div>
       <span class="meter-label" id="meterLabel">0 of 0 steps done</span>
@@ -928,13 +947,39 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
       const st=allSteps.filter(s=>s.section===a.dataset.sec);const c=a.querySelector('.c');
       if(!st.length){c.textContent='Interactive';return}
       const d=st.filter(s=>s.cb.checked).length;c.textContent=d+' of '+st.length+' steps';c.classList.toggle('done',d===st.length);
+      const lp=document.querySelector('#'+a.dataset.sec+' .lp');if(lp)lp.textContent=' · '+d+' of '+st.length+' steps done';
     });
   }
   update();
   document.getElementById('resetBtn').addEventListener('click',()=>{prog={};store.set(KEY,prog);allSteps.forEach(s=>{s.cb.checked=false;s.cb.closest('li').classList.remove('done')});update()});
-  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){nav.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.dataset.sec===e.target.id))}})},{rootMargin:'-30% 0px -60% 0px'});
-  secs.forEach(s=>io.observe(s));
-  if(location.hash){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),50)}
+  // one-lesson-at-a-time router
+  const lessonIds=secs.map(x=>x.id);
+  const homeParts=[document.querySelector('.hero'),document.getElementById('map')];
+  secs.forEach((x,i)=>{
+    const inner=x.querySelector('.inner');
+    const bar=document.createElement('div');bar.className='lbar';
+    bar.innerHTML='<a class="back" href="#map">‹ All lessons</a><span class="lpos">Lesson '+(i+1)+' of '+secs.length+'<span class="lp"></span></span>';
+    inner.prepend(bar);
+    const pv=secs[i-1],nx=secs[i+1],pg=document.createElement('nav');pg.className='pager';pg.setAttribute('aria-label','Lesson navigation');
+    pg.innerHTML=(pv?'<a class="pg prev" href="#'+pv.id+'"><span class="d">‹ Previous</span><span class="t">'+pv.dataset.title+'</span></a>'
+                    :'<a class="pg prev" href="#map"><span class="d">‹ Back</span><span class="t">All lessons</span></a>')
+               +(nx?'<a class="pg next" href="#'+nx.id+'"><span class="d">Next ›</span><span class="t">'+nx.dataset.title+'</span></a>'
+                    :'<a class="pg next" href="#map"><span class="d">Finished ›</span><span class="t">All lessons</span></a>');
+    inner.appendChild(pg);
+  });
+  let current=null,lastLesson=null;
+  function go(id,push){
+    const sec=lessonIds.includes(id)?id:null;current=sec;if(sec)lastLesson=sec;
+    homeParts.forEach(h=>h.hidden=!!sec);
+    secs.forEach(x=>x.hidden=x.id!==sec);
+    nav.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.dataset.sec===lastLesson));
+    if(push!==false){try{history.pushState(null,'','#'+(id||'top'))}catch(e){}}
+    if(sec){window.scrollTo(0,0);replay(document.getElementById(sec))}
+    else{const t=id&&id!=='top'&&document.getElementById(id);if(t)t.scrollIntoView();else window.scrollTo(0,0)}
+  }
+  function route(){go((location.hash||'').slice(1)||'top',false)}
+  window.addEventListener('popstate',route);window.addEventListener('hashchange',route);
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(!id)return;e.preventDefault();go(id)});
 
   // tabs
   document.querySelectorAll('.tabs').forEach(t=>{
@@ -1028,16 +1073,17 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
 
   // scroll reveal with stagger
   const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let revealOn=false,ro=null;
+  function revealIn(root){if(!revealOn)return;root.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('in');else ro.observe(el)})}
+  function replay(root){if(!revealOn)return;root.querySelectorAll('.rv').forEach(el=>el.classList.remove('in'));void root.offsetHeight;requestAnimationFrame(()=>revealIn(root))}
   if(!reduce&&'IntersectionObserver' in window){
+    revealOn=true;
     const targets=document.querySelectorAll('.mod-head,.why,.tag,.term,ol.steps>li,.note,.warn,.tabs,.layers,.tbl,.builder,.q,details,.mcard,.prog,h3,.stage,.chain-card');
     document.documentElement.classList.add('rv-on');
-    const vh=innerHeight;
     targets.forEach(el=>{el.classList.add('rv');
       const sib=[...el.parentElement.children].filter(x=>x.classList.contains('rv'));const k=sib.indexOf(el);
-      el.style.transitionDelay=Math.min(k,6)*60+'ms';
-      if(el.getBoundingClientRect().top<vh)el.classList.add('in');});
-    const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
-    targets.forEach(el=>{if(!el.classList.contains('in'))ro.observe(el)});
+      el.style.transitionDelay=Math.min(k,6)*60+'ms';});
+    ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
   }
 
   /* ---------- virtual agent chat (scripted guide to this page) ---------- */
@@ -1077,7 +1123,7 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
     const next=()=>{if(i>=lines.length){if(chips&&chips.length)addChips(chips);return}
       const t=typing();setTimeout(()=>{t.remove();addBubble(lines[i++],'bot');setTimeout(next,180)},reduce?0:650+Math.min(lines[i].length*8,700))};
     next()}
-  function goTo(sec){const el=document.getElementById(sec);if(!el)return;if(innerWidth<=560)closeChat();el.scrollIntoView({behavior:reduce?'auto':'smooth'})}
+  function goTo(sec){if(innerWidth<=560)closeChat();go(sec)}
   function lessonChip(sec){const s=document.getElementById(sec);return {l:'Go to lesson '+s.querySelector('.mod-num').textContent,go:sec}}
   function handle(c){
     if(c.go){addBubble(c.l,'user');goTo(c.go);botSay(['Taking you there now.'],DEFAULT_QR);return}
@@ -1145,6 +1191,9 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
   cPad.addEventListener('click',()=>{const on=cPad.getAttribute('aria-pressed')!=='true';cPad.setAttribute('aria-pressed',on);pad.classList.toggle('open',on)});
   call.addEventListener('click',e=>{if(e.target===call)endCall()});
   document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(state!=='idle')endCall();else if(chat.classList.contains('open'))closeChat()});
+
+  route();
+  if(!current)revealIn(document.querySelector('main'));
 })();
 </script>
 
