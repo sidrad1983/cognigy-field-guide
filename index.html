@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cognigy Field Guide · SVL Demo</title>
+<title>SVL Cognigy Training</title>
 <meta name="description" content="Interactive, step-by-step course on building Cognigy AI Agents and setting up STT and TTS with Voice Gateway.">
-<meta property="og:title" content="Cognigy Field Guide · SVL Demo">
+<meta property="og:title" content="SVL Cognigy Training">
 <meta property="og:description" content="Build, voice-enable and deploy Cognigy AI Agents, with STT and TTS set up properly.">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ccircle cx='48' cy='48' r='48' fill='%230071e3'/%3E%3Crect x='27' y='36' width='42' height='34' rx='17' fill='%23fff'/%3E%3Ccircle cx='40' cy='51' r='3.6' fill='%231d1d1f'/%3E%3Ccircle cx='56' cy='51' r='3.6' fill='%231d1d1f'/%3E%3C/svg%3E">
@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-/* Layout: SVL Demo system — 56px glass nav, centred hero with agent vignette, 120px alternating white/grey bands at 1080px, 28px cards, floating virtual agent chat and a WebRTC-style call sheet. Single light look by design. */
+/* Layout: SVL Cognigy Training system — 56px glass nav, centred hero with agent vignette, 120px alternating white/grey bands at 1080px, 28px cards, floating virtual agent chat and a WebRTC-style call sheet. Single light look by design. */
 :root{
   --fg:#1d1d1f; --mut:#6e6e73; --w:#ffffff; --g:#f5f5f7; --b:#0071e3;
   --line:rgba(29,29,31,.10); --ring:rgba(29,29,31,.18);
@@ -368,7 +368,7 @@ html.rv-on .rv.in{opacity:1;transform:none}
 
 <header class="top">
   <div class="inner">
-    <a class="word" href="#top" style="text-decoration:none"><svg aria-hidden="true"><use href="#agent"/></svg>SVL Demo</a>
+    <a class="word" href="#top" style="text-decoration:none"><svg aria-hidden="true"><use href="#agent"/></svg>SVL Cognigy Training</a>
     <nav aria-label="Main">
       <a href="#map">Lessons</a><a href="#speechmap">Speech setup</a><a href="#golive">Go live</a><a href="#quiz">Quiz</a>
       <button class="btn primary sm" type="button" data-open-chat>Ask the agent</button>
@@ -379,17 +379,17 @@ html.rv-on .rv.in{opacity:1;transform:none}
 <main id="top">
 <section class="hero">
   <div class="inner">
-    <span class="status"><span class="dot pulse"></span>SVL Demo agent · online now</span>
+    <span class="status"><span class="dot pulse"></span>SVL Cognigy Training · agent online now</span>
     <h1>From first Flow to a live phone line</h1>
     <p class="lede">Ten lessons covering the Cognigy platform, AI Agents, knowledge and NLU, then a deep run through speech: where STT and TTS are configured, how the layers override each other, and how to get a number ringing your agent. Tick each step as you do it; your progress is saved in this browser.</p>
     <div class="cta">
       <a class="btn primary" href="#basics">Start lesson 1</a>
-      <button class="btn secondary" type="button" data-open-chat>Talk to SVL Demo</button>
+      <button class="btn secondary" type="button" data-open-chat>Ask the training agent</button>
     </div>
-    <div class="stage" aria-label="Example conversation with the SVL Demo virtual agent">
-      <svg class="avatar-xl" role="img" aria-label="SVL Demo virtual agent"><use href="#agent"/></svg>
+    <div class="stage" aria-label="Example conversation with the SVL Cognigy Training virtual agent">
+      <svg class="avatar-xl" role="img" aria-label="SVL Cognigy Training virtual agent"><use href="#agent"/></svg>
       <div class="vignette">
-        <div class="bubble bot">Hi, I'm SVL Demo. Shall we set up speech-to-text first?</div>
+        <div class="bubble bot">Hi, I'm your SVL Cognigy Training agent. Shall we set up speech-to-text first?</div>
         <div class="bubble user">Yes please. Azure, en-GB.</div>
         <div class="bubble bot">Lesson 07 has every field you need. I'll walk you through it.</div>
         <div class="bubble bot typing" aria-label="Agent is typing"><i></i><i></i><i></i></div>
@@ -851,11 +851,11 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
 </main>
 
 <!-- virtual agent chat -->
-<button class="launcher" id="launcher" type="button" aria-controls="chat" aria-expanded="false"><svg aria-hidden="true"><use href="#agent"/></svg><span>Ask SVL Demo</span></button>
-<div class="chat" id="chat" role="dialog" aria-label="SVL Demo virtual agent" aria-hidden="true">
+<button class="launcher" id="launcher" type="button" aria-controls="chat" aria-expanded="false"><svg aria-hidden="true"><use href="#agent"/></svg><span>Ask the training agent</span></button>
+<div class="chat" id="chat" role="dialog" aria-label="SVL Cognigy Training virtual agent" aria-hidden="true">
   <div class="chat-h">
     <svg class="av" aria-hidden="true"><use href="#agent"/></svg>
-    <div class="who"><div class="nm">SVL Demo</div><div class="st"><span class="dot pulse"></span>Virtual agent · guide to this course</div></div>
+    <div class="who"><div class="nm">SVL Cognigy Training</div><div class="st"><span class="dot pulse"></span>Virtual agent · guide to this course</div></div>
     <button class="round blue" id="chatCall" type="button" aria-label="Start a demo call"><svg class="ic"><use href="#i-phone"/></svg></button>
     <button class="round grey" id="chatClose" type="button" aria-label="Close chat"><svg class="ic"><use href="#i-close"/></svg></button>
   </div>
@@ -870,7 +870,7 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
 <div class="call" id="call" role="dialog" aria-modal="true" aria-label="Demo voice call" aria-hidden="true">
   <div class="call-card">
     <span class="call-av" id="callAv"><svg aria-hidden="true"><use href="#agent"/></svg></span>
-    <div class="call-nm">SVL Demo</div>
+    <div class="call-nm">SVL Cognigy Training</div>
     <div class="call-st" id="callSt">Connecting…</div>
     <div class="caps" id="caps" aria-live="polite"></div>
     <p class="tech">WebRTC · Opus 48 kHz · DTLS-SRTP · simulated demo of the lesson 10 Flow</p>
@@ -1044,7 +1044,7 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
   const chat=$('chat'),launcher=$('launcher'),log=$('log'),msg=$('msg'),send=$('send');
   let greeted=false,lastFocus=null;
   function openChat(){lastFocus=document.activeElement;chat.classList.add('open');chat.setAttribute('aria-hidden','false');launcher.classList.add('hide');launcher.setAttribute('aria-expanded','true');
-    if(!greeted){greeted=true;botSay(["Hi, I'm SVL Demo, the virtual guide for this course.","I can take you to any lesson, explain where speech settings live, check your progress or run a demo call."],DEFAULT_QR)}
+    if(!greeted){greeted=true;botSay(["Hi, I'm the SVL Cognigy Training agent, your guide for this course.","I can take you to any lesson, explain where speech settings live, check your progress or run a demo call."],DEFAULT_QR)}
     setTimeout(()=>msg.focus(),300)}
   function closeChat(){chat.classList.remove('open');chat.setAttribute('aria-hidden','true');launcher.classList.remove('hide');launcher.setAttribute('aria-expanded','false');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
   launcher.addEventListener('click',openChat);
@@ -1072,7 +1072,7 @@ Resource:          "*"   (AWS doesn't support resource-level limits here)</pre>
   function addChips(list){const w=document.createElement('div');w.className='qr';
     list.forEach(c=>{const b=document.createElement('button');b.type='button';b.textContent=c.l;b.addEventListener('click',()=>{w.remove();handle(c)});w.appendChild(b)});
     log.appendChild(w);log.scrollTop=log.scrollHeight}
-  function typing(){const t=document.createElement('div');t.className='bubble bot typing';t.setAttribute('aria-label','SVL Demo is typing');t.innerHTML='<i></i><i></i><i></i>';log.appendChild(t);log.scrollTop=log.scrollHeight;return t}
+  function typing(){const t=document.createElement('div');t.className='bubble bot typing';t.setAttribute('aria-label','SVL Cognigy Training is typing');t.innerHTML='<i></i><i></i><i></i>';log.appendChild(t);log.scrollTop=log.scrollHeight;return t}
   function botSay(lines,chips){let i=0;
     const next=()=>{if(i>=lines.length){if(chips&&chips.length)addChips(chips);return}
       const t=typing();setTimeout(()=>{t.remove();addBubble(lines[i++],'bot');setTimeout(next,180)},reduce?0:650+Math.min(lines[i].length*8,700))};
